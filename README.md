@@ -1,26 +1,19 @@
-#Apache Hadoop 2.6.0 Docker image
+# Apache Hadoop distribution on Ubuntu with Spark, Pig, and Hive
 
-A few weeks ago we released an Apache Hadoop 2.3 Docker image (using CentOS 6.5 as the guest OS) - this quickly become the most [popular](https://registry.hub.docker.com/search?q=hadoop&s=downloads) Hadoop image in the Docker [registry](https://registry.hub.docker.com/).
-
-
-Following the success of our CentOS based Hadoop 2.3 Docker [image](https://registry.hub.docker.com/u/sequenceiq/hadoop-docker/), the feedback and feature requests we received aligned with the Hadoop release cycle, so we have released an Apache Hadoop 2.6.0 Docker image on Ubuntu 14.04 as well - same as the previous version, it's available as a trusted and automated build on the official Docker [registry](https://registry.hub.docker.com/).
+The docker image Apache hadoop 2.9.2 distribution on Ubuntu 18.04 with Spark 2.4.3, Pig 0.17.0, and Hive 2.3.5
 
 
-_FYI: All the former Hadoop releases (2.3, 2.4.0, 2.4.1, 2.5.0, 2.5.1, 2.5.2, 2.6.0) are available in the GitHub branches or our [Docker Registry](https://registry.hub.docker.com/u/sequenceiq/hadoop-ubuntu/) - check the tags._
+Find this on Docker Hub [https://hub.docker.com/r/suhothayan/hadoop-spark-pig-hive](https://hub.docker.com/r/suhothayan/hadoop-spark-pig-hive)
 
 # Build the image
 
-If you'd like to try directly from the Dockerfile you can build the image as:
-
 ```
-docker build  -t sequenceiq/hadoop-ubuntu:2.6.0 .
+docker build  -t suhothayan/hadoop-spark-pig-hive:2.9.2 .
 ```
 # Pull the image
 
-The image is also released as an official Docker image from Docker's automated build repository - you can always pull or refer the image when launching containers.
-
 ```
-docker pull sequenceiq/hadoop-ubuntu:2.6.0
+docker pull suhothayan/hadoop-spark-pig-hive:2.9.2
 ```
 
 # Start a container
@@ -28,26 +21,54 @@ docker pull sequenceiq/hadoop-ubuntu:2.6.0
 In order to use the Docker image you have just build or pulled use:
 
 ```
-docker run -i -t sequenceiq/hadoop-ubuntu:2.6.0 /etc/bootstrap.sh -bash
+docker run -it -p 50070:50070 -p 8088:8088 -p 8080:8080 suhothayan/hadoop-spark-pig-hive:2.9.2 bash
 ```
 
 ## Testing
 
-You can run one of the stock examples:
+You can run one of the hadoop examples:
 
 ```
-cd $HADOOP_PREFIX
 # run the mapreduce
-bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.6.0.jar grep input output 'dfs[a-z.]+'
+yarn jar $HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.9.2.jar grep input output 'dfs[a-z.]+'
 
 # check the output
-bin/hdfs dfs -cat output/*
+hdfs dfs -cat output/*
 ```
 
-## Hadoop native libraries, build, Bintray, etc
+## Run 
 
-The Hadoop build process is no easy task - requires lots of libraries and their right version, protobuf, etc and takes some time - we have simplified all these, made the build and released a 64b version of Hadoop nativelibs on this [Bintray repo](https://bintray.com/sequenceiq/sequenceiq-bin/hadoop-native-64bit/2.5.0/view/files). Enjoy.
+### Hive 
 
-## Automate everything
+```
+hive
+```
 
-As we have mentioned previously, a Docker file was created and released in the official [Docker repository](https://registry.hub.docker.com/u/sequenceiq/hadoop-ubuntu/)
+or 
+
+```
+ beeline -u jdbc:hive2://
+```
+
+### Pig 
+
+```
+pig
+```
+
+### Spark 
+
+Scala 
+
+```
+spark-shell
+```
+
+Python
+
+```
+pyspark
+```
+
+
+
